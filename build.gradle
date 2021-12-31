@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'mysql:mysql-connector-java:8.0.27'
@@ -29,10 +29,10 @@ dependencies {
 
 	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.querydsl:querydsl-apt:5.0.0'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
-	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0'
-	annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.0.0'
-	annotationProcessor 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+	implementation 'com.querydsl:querydsl-core:5.0.0'
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:general'
 
 	// jwt & security
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'

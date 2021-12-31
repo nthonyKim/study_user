@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 10
+    port: 6379
+    host: localhost
+
+jwt:
+  secret: study*rand0mStr$
+  access:
+    name: access
+    valid: 3600000
+  refresh:
+    name: refresh
+    valid: 1209600000
