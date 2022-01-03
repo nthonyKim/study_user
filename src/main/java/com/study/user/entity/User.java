@@ -22,7 +22,6 @@ public class User {
 	private String userId; // 사용자 아이디
 	private String userName; // 사용자 이름
 	private String userPw; // 사용자 비밀번호
-	private String authGroupId; // 권한 그룹 아이디
 	private LocalDateTime lastLoginDatetime; // 마지막 로그인 일시
 	private LocalDateTime lastChangePwDatetime; // 마지막 비밀번호 변경일시
 	private Integer wrongPwCnt; // 비밀번호 오류 횟수
@@ -32,6 +31,18 @@ public class User {
 	@UpdateTimestamp
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime updateDatetime; // 수정일시
-	private Integer useFlag; // 사용여부
+	private Boolean useFlag = true; // 사용여부
 
+	@ManyToOne
+	@JoinColumn(name = "auth_group_id")
+	private AuthGroup authGroup;
+
+	public void changePassword(String newUserPw){
+		this.setUserPw(newUserPw);
+		this.setWrongPwCnt(null);
+	}
+
+	public void softDelete(){
+		this.setUseFlag(false);
+	}
 }

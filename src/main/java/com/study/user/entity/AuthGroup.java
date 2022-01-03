@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @QueryEntity
@@ -27,6 +28,12 @@ public class AuthGroup {
 	@UpdateTimestamp
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime updateDatetime; // 수정일시
-	private Integer useFlag; // 사용여부
+	private Boolean useFlag = true; // 사용여부
 
+	@OneToMany(mappedBy = "authGroup", fetch = FetchType.LAZY, cascade= CascadeType.REMOVE, orphanRemoval = true)
+	private List<AuthGroupDetail> authGroupDetails;
+
+	public void softDelete(){
+		this.setUseFlag(false);
+	}
 }
