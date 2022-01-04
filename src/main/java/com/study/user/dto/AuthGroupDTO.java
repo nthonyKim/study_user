@@ -1,44 +1,32 @@
-package com.study.user.entity;
-
-import javax.persistence.*;
+package com.study.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryEntity;
+import com.study.user.entity.AuthGroupDetail;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@QueryEntity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class AuthGroup {
-	@Id
+public class AuthGroupDTO {
 	private String authGroupId; // 권한 그룹 아이디
 	private String authGroupName; // 권한 그룹 이름
-	@CreationTimestamp
+	@Hidden
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime registerDatetime; // 등록일시
-	@UpdateTimestamp
+	@Hidden
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime updateDatetime; // 수정일시
+	@Hidden
 	private Boolean useFlag; // 사용여부
-
-	@OneToMany(mappedBy = "authGroup", fetch = FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval = true)
-	private List<AuthGroupDetail> authGroupDetails;
-
-	public void softDelete(){
-		this.setUseFlag(false);
-	}
-
-	@PrePersist
-	private void insertSetting(){
-		if(this.useFlag == null) { this.useFlag = true; }
-	}
+	private List<AuthGroupDetailDTO> authGroupDetails;
 }

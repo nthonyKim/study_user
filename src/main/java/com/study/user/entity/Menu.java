@@ -32,7 +32,7 @@ public class Menu {
 	@UpdateTimestamp
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime updateDatetime; // 수정일시
-	private Boolean useFlag = true; // 사용여부
+	private Boolean useFlag; // 사용여부
 
 	@ManyToOne
 	@JoinColumn(name = "parent_menu_id")
@@ -44,5 +44,12 @@ public class Menu {
 
 	public void softDelete(){
 		this.setUseFlag(false);
+	}
+
+	@PrePersist
+	private void insertSetting(){
+		if(this.depth == null) { this.depth = 1; }
+		if(this.sort == null) { this.sort = 1; }
+		if(this.useFlag == null) { this.useFlag = true; }
 	}
 }
