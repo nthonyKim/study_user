@@ -23,3 +23,12 @@ springdoc:
     path: /swagger
     operations-sorter: method
     tags-sorter: method
+
+logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+  level:
+    jdbc.resultsettable: info
+    jdbc.sqlonly: info
+    org.springframework.web: error
+  config: classpath:logback.xml
