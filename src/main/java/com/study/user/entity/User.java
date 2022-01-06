@@ -43,6 +43,10 @@ public class User {
 		this.setWrongPwCnt(null);
 	}
 
+	public void updateWrongPwCnt(){
+		this.setWrongPwCnt(this.wrongPwCnt + 1);
+	}
+
 	public void softDelete(){
 		this.setUseFlag(false);
 	}

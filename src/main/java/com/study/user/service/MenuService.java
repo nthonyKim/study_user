@@ -2,15 +2,11 @@ package com.study.user.service;
 
 import com.study.user.dto.MenuDTO;
 import com.study.user.dto.ResponseDTO;
-import com.study.user.dto.UserDTO;
 import com.study.user.entity.Menu;
-import com.study.user.entity.User;
+import com.study.user.exception.NotFoundException;
 import com.study.user.mapper.MenuMapper;
-import com.study.user.mapper.UserMapper;
 import com.study.user.repository.MenuRepository;
-import com.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,7 +28,9 @@ public class MenuService {
     }
 
     public MenuDTO findById(final String menuId) {
-        return menuMapper.toDTO(menuRepository.findById(menuId).orElseThrow());
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NotFoundException(MESSAGE_KEY_HEAD + "no_menu.error"));
+        return menuMapper.toDTO(menu);
     }
 
     public ResponseDTO createMenu(MenuDTO menuDTO) {
@@ -46,22 +44,16 @@ public class MenuService {
     }
 
     public ResponseDTO updateMenu(MenuDTO menuDTO) {
-        Optional<Menu> optionalMenu = menuRepository.findById(menuDTO.getMenuId());
-        if(optionalMenu.isPresent()){
-            menuRepository.save(menuMapper.toEntity(menuDTO));
-            return ResponseDTO.success(MESSAGE_KEY_HEAD + "update.success");
-        } else {
-            return ResponseDTO.fail(MESSAGE_KEY_HEAD + "no_exist.error");
-        }
+        Menu menu = menuRepository.findById(menuDTO.getMenuId())
+                .orElseThrow(() -> new NotFoundException(MESSAGE_KEY_HEAD + "no_menu.error"));
+        menuRepository.save(menuMapper.toEntity(menuDTO));
+        return ResponseDTO.success(MESSAGE_KEY_HEAD + "update.success");
     }
 
     public ResponseDTO deleteMenu(MenuDTO menuDTO) {
-        Optional<Menu> optionalMenu = menuRepository.findById(menuDTO.getMenuId());
-        if(optionalMenu.isPresent()){
-            optionalMenu.get().softDelete();
-            return ResponseDTO.success(MESSAGE_KEY_HEAD + "delete.success");
-        } else {
-            return ResponseDTO.fail(MESSAGE_KEY_HEAD + "no_exist.error");
-        }
+        Menu menu = menuRepository.findById(menuDTO.getMenuId())
+                .orElseThrow(() -> new NotFoundException(MESSAGE_KEY_HEAD + "no_menu.error"));
+        menu.softDelete();
+        return ResponseDTO.success(MESSAGE_KEY_HEAD + "delete.success");
     }
 }

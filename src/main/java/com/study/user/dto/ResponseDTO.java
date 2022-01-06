@@ -31,6 +31,13 @@ public class ResponseDTO {
                 .build();
     }
 
+    public static ResponseDTO success(){
+        return ResponseDTO.builder()
+                .result(true)
+                .status(HttpStatus.OK.value())
+                .build();
+    }
+
     public static ResponseDTO success(String messageKey){
         return ResponseDTO.builder()
                 .result(true)

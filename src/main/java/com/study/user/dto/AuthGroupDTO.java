@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,9 @@ import java.util.List;
 @Setter
 @Builder
 public class AuthGroupDTO {
+	@NotNull
 	private String authGroupId; // 권한 그룹 아이디
+	@NotNull
 	private String authGroupName; // 권한 그룹 이름
 	@Hidden
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")

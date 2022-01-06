@@ -30,7 +30,7 @@ public class AuthGroup {
 	private LocalDateTime updateDatetime; // 수정일시
 	private Boolean useFlag; // 사용여부
 
-	@OneToMany(mappedBy = "authGroup", fetch = FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "authGroup", fetch = FetchType.LAZY, cascade= CascadeType.REMOVE, orphanRemoval = true)
 	private List<AuthGroupDetail> authGroupDetails;
 
 	public void softDelete(){
