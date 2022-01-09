@@ -16,10 +16,8 @@ spring:
     host: localhost
 
 jwt:
-  secret: study*rand0mStr$
+  secret-key: study*rand0mStr$
   access:
-    name: access
     valid: 3600000
   refresh:
-    name: refresh
     valid: 1209600000
