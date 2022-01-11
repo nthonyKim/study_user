@@ -22,7 +22,7 @@ public class LoginService {
         User user = userRepository.findById(userDTO.getUserId())
                 .orElseThrow(() -> new NotFoundException("user.login.no_user.error"));
 
-        if(user.getUserPw().equals(pwEncoder.encode(userDTO.getUserPw()))) {
+        if(pwEncoder.matches(userDTO.getUserPw(), user.getUserPw())) {
             if(!user.getUseFlag()) { ResponseDTO.fail("user.login.use_false.error"); }
             if(user.getWrongPwCnt() >= 5) { ResponseDTO.fail("user.login.wrong_cnt.error"); }
 
