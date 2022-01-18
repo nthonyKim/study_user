@@ -1,9 +1,12 @@
 package com.study.user.security;
 
+import com.study.user.entity.AuthGroupDetail;
 import com.study.user.exception.InvalidTokenException;
-import com.study.user.redis.RedisTemplate;
+import com.study.user.redis.Redis;
 import com.study.user.util.CollectionUtil;
+import com.study.user.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,23 +24,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate redisTemplate;
+    private final Redis redis;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException, InvalidTokenException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
 
         try {
-            if(jwtTokenProvider.validateToken("ACCESS", token)){
+            if(jwtTokenProvider.validateToken(TokenType.ACCESS, token)){
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                Map<String, String> menu = redisTemplate.getEntries("menu");
-                if(!CollectionUtil.isEmpty(menu.get(((HttpServletRequest) request).getRequestURI()))){
-                    /**
-                     * method를 object로 변환한 부분과 (예: GET -> READ)
-                     * 현재 사용자의 토큰 정보의 role을 가져와 허용 여부를 판별한 뒤 path check
-                     */
+                Map<String, String> menu = redis.getEntries("menu");
+                String requestURI = ((HttpServletRequest) request).getRequestURI();
+                if(CollectionUtil.isNotEmpty(menu.get(requestURI))){
+                    String authDetail = convertMethodToCRUD(RequestUtil.getMethod());
+                    System.out.println(RequestUtil.getUri());
                 }
 
             } else {
@@ -49,5 +51,16 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         }
 
         chain.doFilter(request, response);
+    }
+
+    private String convertMethodToCRUD(String method){
+        switch (method){
+            case "POST" : return AuthGroupDetail.TYPE_CREATE;
+            case "GET" : return AuthGroupDetail.TYPE_READ;
+            case "PUT" : return AuthGroupDetail.TYPE_UPDATE;
+            case "DELETE" : return AuthGroupDetail.TYPE_DELETE;
+        }
+
+        return null;
     }
 }

@@ -40,7 +40,7 @@ public class User {
 	public void changePassword(String newUserPw){
 		this.setUserPw(newUserPw);
 		this.setLastChangePwDatetime(LocalDateTime.now());
-		this.setWrongPwCnt(null);
+		this.setWrongPwCnt(0);
 	}
 
 	public void updateWrongPwCnt(){

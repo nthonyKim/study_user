@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name="01. User", description = "사용자")
+@Tag(name="04. Login", description = "로그인")
 @RequiredArgsConstructor
-@RequestMapping("/user")
 @RestController
 public class LoginController {
     private final LoginService loginService;
 
     @Operation(summary  = "로그인")
     @PostMapping("/login")
-    public ResponseDTO login(@RequestBody UserDTO userDTO){
-        return loginService.login(userDTO);
+    public ResponseDTO login(@RequestParam String userId, @RequestParam String userPw){
+        return loginService.login(userId, userPw);
     }
 
 }

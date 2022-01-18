@@ -11,4 +11,8 @@ public class CollectionUtil {
         if (param instanceof Map) return ((Map<?, ?>) param).isEmpty();
         return false;
     }
+
+    public static boolean isNotEmpty(Object param){
+        return !isEmpty(param);
+    }
 }

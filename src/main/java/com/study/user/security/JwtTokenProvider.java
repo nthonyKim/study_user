@@ -30,9 +30,6 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh.valid")
     private String REFRESH_VALID;
 
-    private final String TOKEN_TYPE_ACCESS = "ACCESS";
-    private final String TOKEN_TYPE_REFRESH = "REFRESH";
-
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -41,7 +38,7 @@ public class JwtTokenProvider {
     public String createToken(String tokenType, String userId, String authGroupId) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("role", authGroupId);
-        claims.put("type", isAccess(tokenType) ? TOKEN_TYPE_ACCESS : TOKEN_TYPE_REFRESH );
+        claims.put("type", isAccess(tokenType) ? TokenType.ACCESS : TokenType.REFRESH );
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -78,6 +75,6 @@ public class JwtTokenProvider {
     }
 
     private boolean isAccess(String tokenType){
-        return tokenType.equals(TOKEN_TYPE_ACCESS);
+        return tokenType.equals(TokenType.ACCESS);
     }
 }

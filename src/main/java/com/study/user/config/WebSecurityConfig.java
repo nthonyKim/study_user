@@ -1,6 +1,6 @@
 package com.study.user.config;
 
-import com.study.user.redis.RedisTemplate;
+import com.study.user.redis.Redis;
 import com.study.user.security.JwtAuthenticationFilter;
 import com.study.user.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate redisTemplate;
+    private final Redis redis;
 
     @Override
     public void configure(WebSecurity web)  {
@@ -40,6 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redis), BasicAuthenticationFilter.class);
     }
 }

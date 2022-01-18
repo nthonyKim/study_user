@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-public class RedisTemplate {
+public class Redis {
     @Value("${spring.profiles.active}")
     private String profile;
 

@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class AuthGroupDetail {
-	static final String TYPE_READ = "READ";
-	static final String TYPE_CREATE = "CREATE";
-	static final String TYPE_UPDATE = "UPDATE";
-	static final String TYPE_DELETE = "DELETE";
+	public static final String TYPE_READ = "READ";
+	public static final String TYPE_CREATE = "CREATE";
+	public static final String TYPE_UPDATE = "UPDATE";
+	public static final String TYPE_DELETE = "DELETE";
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.AUTO)
