@@ -1,5 +1,6 @@
 package com.study.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.study.user.dto.MenuDTO;
 import com.study.user.dto.ResponseDTO;
 import com.study.user.service.MenuService;
@@ -45,5 +46,11 @@ public class MenuController {
     @DeleteMapping
     public ResponseDTO deleteMenu(@RequestBody MenuDTO menuDTO){
         return menuService.deleteMenu(menuDTO);
+    }
+
+    @Operation(summary  = "redis 데이터 업데이트", description = "메뉴 및 권한을 Redis로 업데이트 한다.")
+    @PostMapping("/redis")
+    public ResponseDTO updateToRedis() throws JsonProcessingException {
+        return menuService.updateToRedis();
     }
 }

@@ -1,16 +1,23 @@
 package com.study.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.user.dto.MenuDTO;
 import com.study.user.dto.ResponseDTO;
+import com.study.user.entity.AuthGroupDetail;
 import com.study.user.entity.Menu;
 import com.study.user.exception.NotFoundException;
 import com.study.user.mapper.MenuMapper;
+import com.study.user.repository.AuthGroupDetailRepository;
 import com.study.user.repository.MenuRepository;
+import com.study.user.util.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
+    private final AuthGroupDetailRepository authGroupDetailRepository;
     private final MenuMapper menuMapper;
     private static final String MESSAGE_KEY_HEAD = "user.menu.";
 
@@ -55,5 +63,24 @@ public class MenuService {
                 .orElseThrow(() -> new NotFoundException(MESSAGE_KEY_HEAD + "no_menu.error"));
         menu.softDelete();
         return ResponseDTO.success(MESSAGE_KEY_HEAD + "delete.success");
+    }
+
+    public ResponseDTO updateToRedis() throws JsonProcessingException {
+        ObjectMapper objectWrapper = new ObjectMapper();
+        List<Menu> menus = menuRepository.findAll();
+//        Map<Object, List<AuthGroupDetail>> authGroupDetailMap = authGroupDetailRepository.findAll()
+//                .stream().collect(Collectors.groupingBy(a -> a.getMenu().getMenuId()));
+
+        for(Menu menu : menus) {
+            Map<String, String> menuMap = objectWrapper.convertValue(menuMapper.toDTO(menu), Map.class);
+            Map<String, String> authMap = new HashMap<>();
+
+//            List<AuthGroupDetail> authGroupDetails = authGroupDetailMap.get(menu.getMenuId());
+//            if(CollectionUtil.isNotEmpty(authGroupDetails)){
+//                //
+//            }
+
+        }
+        return ResponseDTO.success();
     }
 }
